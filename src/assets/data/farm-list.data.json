@@ -1,0 +1,92 @@
+[
+  {
+    "id": "eileenHorton-1153",
+    "farm": "Green Acres",
+    "province": "Ontario",
+    "address": "123 Farm Lane, Ontario, Canada",
+    "coordinate": "43.7, -79.42",
+    "farmStatus": "Active",
+    "lastUpdate": 1682764800
+  },
+  {
+    "id": "terranceMoreno-1322",
+    "farm": "Sunny Fields",
+    "province": "California",
+    "address": "456 Sunshine Blvd, California, USA",
+    "coordinate": "36.78, -119.42",
+    "farmStatus": "Inactive",
+    "lastUpdate": 1676726400
+  },
+  {
+    "id": "ronVargas7653",
+    "farm": "Red Barn Farms",
+    "province": "Texas",
+    "address": "789 Barn Rd, Texas, USA",
+    "coordinate": "31.95, -99.92",
+    "farmStatus": "Active",
+    "lastUpdate": 1689158400
+  },
+  {
+    "id": "lukeCook4721",
+    "farm": "Golden Field",
+    "province": "New York",
+    "address": "101 Fieldview St, New York, USA",
+    "coordinate": "40.71, -74.01",
+    "farmStatus": "Maintenance",
+    "lastUpdate": 1684416000
+  },
+  {
+    "id": "joyceFreeman1384",
+    "farm": "Blue Sky Farms",
+    "province": "Florida",
+    "address": "202 Blue Sky Blvd, Florida, USA",
+    "coordinate": "27.99, -81.79",
+    "farmStatus": "Active",
+    "lastUpdate": 1685712000
+  },
+  {
+    "id": "samanthaPhillips8493",
+    "farm": "Citrus Grove",
+    "province": "Arizona",
+    "address": "303 Grove Dr, Arizona, USA",
+    "coordinate": "33.45, -112.07",
+    "farmStatus": "Inactive",
+    "lastUpdate": 1679347200
+  },
+  {
+    "id": "taraFletcher1263",
+    "farm": "Riverbend Farm",
+    "province": "Washington",
+    "address": "404 River Rd, Washington, USA",
+    "coordinate": "47.60, -122.33",
+    "farmStatus": "Active",
+    "lastUpdate": 1687766400
+  },
+  {
+    "id": "carolynHanson7953",
+    "farm": "Meadowview Farms",
+    "province": "Oregon",
+    "address": "505 Meadowview Ave, Oregon, USA",
+    "coordinate": "45.52, -122.68",
+    "farmStatus": "Active",
+    "lastUpdate": 1684166400
+  },
+  {
+    "id": "lloydObrien1564",
+    "farm": "Horizon Acres",
+    "province": "Michigan",
+    "address": "606 Horizon Dr, Michigan, USA",
+    "coordinate": "42.96, -83.75",
+    "farmStatus": "Maintenance",
+    "lastUpdate": 1678176000
+  },
+  {
+    "id": "ellaRobinson1093",
+    "farm": "Wildflower Meadows",
+    "province": "Colorado",
+    "address": "707 Wildflower Ln, Colorado, USA",
+    "coordinate": "39.55, -104.99",
+    "farmStatus": "Active",
+    "lastUpdate": 1687392000
+  }
+]

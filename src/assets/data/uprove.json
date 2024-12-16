@@ -1,0 +1,82 @@
+[
+  {
+    "id": "eileenHorton-1153",
+    "name": "Eileen Horton",
+    "username": "eileen_h",
+    "lastOnline": 1573430400,
+    "role": "Admin",
+    "division": "Product Management"
+  },
+  {
+    "id": "terranceMoreno-1322",
+    "name": "Terrance Moreno",
+    "username": "terrance_m",
+    "lastOnline": 1572393600,
+    "role": "User",
+    "division": "Software Engineering"
+  },
+  {
+    "id": "ronVargas7653",
+    "name": "Ron Vargas",
+    "username": "ronnie_vergas",
+    "lastOnline": 1572393600,
+    "role": "User",
+    "division": "UI/UX Design"
+  },
+  {
+    "id": "lukeCook4721",
+    "name": "Luke Cook",
+    "username": "cookie_lukie",
+    "lastOnline": 1579132800,
+    "role": "Admin",
+    "division": "Human Resources"
+  },
+  {
+    "id": "joyceFreeman1384",
+    "name": "Joyce Freeman",
+    "username": "joyce991",
+    "lastOnline": 1582416000,
+    "role": "User",
+    "division": "Frontend Development"
+  },
+  {
+    "id": "samanthaPhillips8493",
+    "name": "Samantha Phillips",
+    "username": "samanthaphil",
+    "lastOnline": 1583107200,
+    "role": "User",
+    "division": "Compliance"
+  },
+  {
+    "id": "taraFletcher1263",
+    "name": "Tara Fletcher",
+    "username": "taratarara",
+    "lastOnline": 1582761600,
+    "role": "User",
+    "division": "Compliance"
+  },
+  {
+    "id": "carolynHanson7953",
+    "name": "Carolyn Hanson",
+    "username": "carolyn_h",
+    "lastOnline": 1584489600,
+    "role": "User",
+    "division": "Compliance"
+  },
+  {
+    "id": "lloydObrien1564",
+    "name": "Lloyd Obrien",
+    "username": "handsome-obrien",
+    "lastOnline": 1584576000,
+    "role": "User",
+    "division": "Software Engineering"
+  },
+  {
+    "id": "ellaRobinson1093",
+    "name": "Ella Robinson",
+    "username": "ella_robinson",
+    "lastOnline": 1586217600,
+    "role": "User",
+    "division": "Software Engineering"
+  }
+]

@@ -1,0 +1,98 @@
+[
+    {
+        "name": "Blue Jacket",
+        "category": "Cloths",
+        "serialNumber": "SJ12345",
+        "lastUpdate": 1682764800,
+        "farm": "Green Acres",
+        "henHouse": "Henhouse 1"
+    },
+    {
+        "name": "White Backpack",
+        "category": "Bags",
+        "serialNumber": "BP67890",
+        "lastUpdate": 1676726400,
+        "farm": "Sunny Fields",
+        "henHouse": "Henhouse 2"
+    },
+    {
+        "name": "Black Sneaker",
+        "category": "Shoes",
+        "serialNumber": "SN11223",
+        "lastUpdate": 1689158400,
+        "farm": "Red Barn Farms",
+        "henHouse": "Henhouse 3"
+    },
+    {
+        "name": "Gray Hoodies",
+        "category": "Cloths",
+        "serialNumber": "HD44567",
+        "lastUpdate": 1684416000,
+        "farm": "Golden Field",
+        "henHouse": "Henhouse 4"
+    },
+    {
+        "name": "Blue Backpack",
+        "category": "Bags",
+        "serialNumber": "BP89012",
+        "lastUpdate": 1685712000,
+        "farm": "Blue Sky Farms",
+        "henHouse": "Henhouse 5"
+    },
+    {
+        "name": "White Sneaker",
+        "category": "Shoes",
+        "serialNumber": "SN33456",
+        "lastUpdate": 1679347200,
+        "farm": "Citrus Grove",
+        "henHouse": "Henhouse 6"
+    },
+    {
+        "name": "Strip Analog Watch",
+        "category": "Watches",
+        "serialNumber": "WA56789",
+        "lastUpdate": 1687766400,
+        "farm": "Riverbend Farm",
+        "henHouse": "Henhouse 7"
+    },
+    {
+        "name": "Red Beat Headphone",
+        "category": "Devices",
+        "serialNumber": "HP12399",
+        "lastUpdate": 1684166400,
+        "farm": "Meadowview Farms",
+        "henHouse": "Henhouse 8"
+    },
+    {
+        "name": "Apple Macbook Pro",
+        "category": "Devices",
+        "serialNumber": "MBP15684",
+        "lastUpdate": 1678176000,
+        "farm": "Horizon Acres",
+        "henHouse": "Henhouse 9"
+    },
+    {
+        "name": "Bronze Analog Watch",
+        "category": "Watches",
+        "serialNumber": "WA87654",
+        "lastUpdate": 1687392000,
+        "farm": "Wildflower Meadows",
+        "henHouse": "Henhouse 10"
+    },
+    {
+        "name": "Apple Watch",
+        "category": "Devices",
+        "serialNumber": "AW23456",
+        "lastUpdate": 1685721600,
+        "farm": "Mountain Ridge",
+        "henHouse": "Henhouse 11"
+    },
+    {
+        "name": "Antique Analog Watch",
+        "category": "Watches",
+        "serialNumber": "WA23498",
+        "lastUpdate": 1685392000,
+        "farm": "Golden Fields",
+        "henHouse": "Henhouse 12"
+    }
+]

@@ -1,0 +1,92 @@
+[
+  {
+    "id": "eileenHorton-1153",
+    "henhouse": "Henhouse 1",
+    "henhouseStatus": "Active",
+    "farm": "Green Acres",
+    "farmStatus": "Active",
+    "lastUpdate": 1682764800,
+    "population": 120
+  },
+  {
+    "id": "terranceMoreno-1322",
+    "henhouse": "Henhouse 2",
+    "henhouseStatus": "Inactive",
+    "farm": "Sunny Fields",
+    "farmStatus": "Inactive",
+    "lastUpdate": 1676726400,
+    "population": 0
+  },
+  {
+    "id": "ronVargas7653",
+    "henhouse": "Henhouse 3",
+    "henhouseStatus": "Active",
+    "farm": "Red Barn Farms",
+    "farmStatus": "Active",
+    "lastUpdate": 1689158400,
+    "population": 150
+  },
+  {
+    "id": "lukeCook4721",
+    "henhouse": "Henhouse 4",
+    "henhouseStatus": "Maintenance",
+    "farm": "Golden Field",
+    "farmStatus": "Maintenance",
+    "lastUpdate": 1684416000,
+    "population": 60
+  },
+  {
+    "id": "joyceFreeman1384",
+    "henhouse": "Henhouse 5",
+    "henhouseStatus": "Active",
+    "farm": "Blue Sky Farms",
+    "farmStatus": "Active",
+    "lastUpdate": 1685712000,
+    "population": 130
+  },
+  {
+    "id": "samanthaPhillips8493",
+    "henhouse": "Henhouse 6",
+    "henhouseStatus": "Inactive",
+    "farm": "Citrus Grove",
+    "farmStatus": "Inactive",
+    "lastUpdate": 1679347200,
+    "population": 0
+  },
+  {
+    "id": "taraFletcher1263",
+    "henhouse": "Henhouse 7",
+    "henhouseStatus": "Active",
+    "farm": "Riverbend Farm",
+    "farmStatus": "Active",
+    "lastUpdate": 1687766400,
+    "population": 140
+  },
+  {
+    "id": "carolynHanson7953",
+    "henhouse": "Henhouse 8",
+    "henhouseStatus": "Active",
+    "farm": "Meadowview Farms",
+    "farmStatus": "Active",
+    "lastUpdate": 1684166400,
+    "population": 110
+  },
+  {
+    "id": "lloydObrien1564",
+    "henhouse": "Henhouse 9",
+    "henhouseStatus": "Maintenance",
+    "farm": "Horizon Acres",
+    "farmStatus": "Maintenance",
+    "lastUpdate": 1678176000,
+    "population": 50
+  },
+  {
+    "id": "ellaRobinson1093",
+    "henhouse": "Henhouse 10",
+    "henhouseStatus": "Active",
+    "farm": "Wildflower Meadows",
+    "farmStatus": "Active",
+    "lastUpdate": 1687392000,
+    "population": 125
+  }
+]
