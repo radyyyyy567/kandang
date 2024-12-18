@@ -8,22 +8,99 @@ export const publicRoutes = [
         component: React.lazy(() => import('views/auth-views/authentication/login')),
     },
     {
-        key: 'register',
-        path: `${AUTH_PREFIX_PATH}/register`,
-        component: React.lazy(() => import('views/auth-views/authentication/register')),
+        key: 'login-1',
+        path: `${AUTH_PREFIX_PATH}/login-1`,
+        component: React.lazy(() => import('views/auth-views/authentication/login-1')),
+    },
+    {
+        key: 'login-2',
+        path: `${AUTH_PREFIX_PATH}/login-2`,
+        component: React.lazy(() => import('views/auth-views/authentication/login-2')),
+    },
+    {
+        key: 'register-1',
+        path: `${AUTH_PREFIX_PATH}/register-1`,
+        component: React.lazy(() => import('views/auth-views/authentication/register-1')),
+    },
+    {
+        key: 'register-2',
+        path: `${AUTH_PREFIX_PATH}/register-2`,
+        component: React.lazy(() => import('views/auth-views/authentication/register-2')),
     },
     {
         key: 'forgot-password',
         path: `${AUTH_PREFIX_PATH}/forgot-password`,
         component: React.lazy(() => import('views/auth-views/authentication/forgot-password')),
-    }
+    },
+    {
+        key: 'error-page-1',
+        path: `${AUTH_PREFIX_PATH}/error-page-1`,
+        component: React.lazy(() => import('views/auth-views/errors/error-page-1')),
+    },
+    {
+        key: 'error-page-2',
+        path: `${AUTH_PREFIX_PATH}/error-page-2`,
+        component: React.lazy(() => import('views/auth-views/errors/error-page-2')),
+    },
 ]
 
 export const protectedRoutes = [
+    
     {
-        key: 'user-list',
-        path: `${APP_PREFIX_PATH}/dashboards/default`,
-        component: React.lazy(() => import('views/app-views/pages/user-list')),
+        key: 'login-1',
+        path: `${APP_PREFIX_PATH}/login-1`,
+        component: React.lazy(() => import('views/auth-views/authentication/login-1')),
+        meta: {
+            blankLayout: true
+        }
+    },
+    {
+        key: 'login-2',
+        path: `${APP_PREFIX_PATH}/login-2`,
+        component: React.lazy(() => import('views/auth-views/authentication/login-2')),
+        meta: {
+            blankLayout: true
+        }
+    },
+    {
+        key: 'register-1',
+        path: `${APP_PREFIX_PATH}/register-1`,
+        component: React.lazy(() => import('views/auth-views/authentication/register-1')),
+        meta: {
+            blankLayout: true
+        }
+    },
+    {
+        key: 'register-2',
+        path: `${APP_PREFIX_PATH}/register-2`,
+        component: React.lazy(() => import('views/auth-views/authentication/register-2')),
+        meta: {
+            blankLayout: true
+        }
+    },
+    {
+        key: 'forgot-password',
+        path: `${APP_PREFIX_PATH}/forgot-password`,
+        component: React.lazy(() => import('views/auth-views/authentication/forgot-password')),
+        meta: {
+            blankLayout: true
+        }
+    },
+    {
+        key: 'error-page-1',
+        path: `${APP_PREFIX_PATH}/error-page-1`,
+        component: React.lazy(() => import('views/auth-views/errors/error-page-1')),
+        meta: {
+            blankLayout: true
+        }
+    },
+    {
+        key: 'error-page-2',
+        path: `${APP_PREFIX_PATH}/error-page-2`,
+        component: React.lazy(() => import('views/auth-views/errors/error-page-2')),
+        meta: {
+            blankLayout: true
+        }
     },
     {
         key: 'user-list',
@@ -41,24 +118,24 @@ export const protectedRoutes = [
         component: React.lazy(() => import('views/app-views/pages/division')),
     },
     {
-        key: 'farm',
+        key: 'pages.farm',
         path: `${APP_PREFIX_PATH}/farm`,
         component: React.lazy(() => import('views/app-views/pages/farm')),
     },
     {
-        key: 'henhouse',
+        key: 'pages.henhouse',
         path: `${APP_PREFIX_PATH}/henhouse`,
         component: React.lazy(() => import('views/app-views/pages/henhouse')),
     },
 
     {
-        key: 'product',
+        key: 'pages.product',
         path: `${APP_PREFIX_PATH}/product`,
         component: React.lazy(() => import('views/app-views/pages/product')),
     },
     {
-        key: 'uprove',
+        key: 'pages.uprove',
         path: `${APP_PREFIX_PATH}/pages/uprove`,
         component: React.lazy(() => import('views/app-views/pages/uprove')),
     },
-]   
+]

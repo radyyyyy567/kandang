@@ -40,13 +40,14 @@ export const LoginForm = props => {
 
 	const initialCredential = {
 		email: 'wirandagilang',
-		password: 'qwertyuiop1'
+		password: 'password123'
 	}
 
 	const onLogin = values => {
 		showLoading()
 		signIn(values);
-		console.log("hai")
+		const hai = signIn;
+		console.log("miaw", hai)
 	};
 
 	const onGoogleLogin = () => {

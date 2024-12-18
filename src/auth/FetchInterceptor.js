@@ -40,13 +40,12 @@ service.interceptors.response.use( (response) => {
 	let notificationParam = {
 		message: ''
 	}
-
+ 
 	// Remove token and redirect 
 	if (unauthorizedCode.includes(error.response.status)) {
 		notificationParam.message = 'Authentication Fail'
 		notificationParam.description = 'Please login again'
 		localStorage.removeItem(AUTH_TOKEN)
-
 		store.dispatch(signOutSuccess())
 	}
 

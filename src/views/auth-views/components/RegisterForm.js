@@ -65,7 +65,7 @@ export const RegisterForm = (props) => {
 				clearTimeout(timer);
 			};
 		}
-	});
+	}, []);
 	
 	return (
 		<>

@@ -18,18 +18,4 @@ AuthService.register = function (data) {
 	})
 }
 
-AuthService.logout = function () {
-	return fetch({
-		url: '/auth/logout',
-		method: 'post'
-	})
-}
-
-AuthService.loginInOAuth = function () {
-	return fetch({
-		url: '/auth/loginInOAuth',
-		method: 'post'
-	})
-}
-
 export default AuthService;

@@ -22,7 +22,7 @@ const ErrorTwo = () => {
 						</Link>
 					</div>
 				</div>
-				<Flex mobileFlex={false} justifyContent="between">
+				<Flex mobileFlex={false} justifyContent="space-between">
 					<span>Copyright  &copy;  {`${new Date().getFullYear()}`} <span className="font-weight-semibold">{`${APP_NAME}`}</span></span>
 					<div>
 						<a className="text-gray" href="/#" onClick={e => e.preventDefault()}>Term & Conditions</a>

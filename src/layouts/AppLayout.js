@@ -76,7 +76,7 @@ export const AppLayout = ({ navCollapsed, navType, direction, children }) => {
                 <Layout style={getLayoutDirectionGutter()}>
                     <AppContent isNavTop={isNavTop}>
                         <PageHeader display={currentRouteInfo?.breadcrumb} title={currentRouteInfo?.title} />
-                        <Content className="h-100">
+                        <Content className="h-100 bg-[#fafafb]]">
                             <Suspense fallback={<Loading cover="content"/>}>
                                 {children}
                             </Suspense>
