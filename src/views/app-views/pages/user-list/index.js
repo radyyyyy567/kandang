@@ -154,8 +154,8 @@ export class UserList extends Component {
     this.setState({ modalVisible: false, detailVisible: false, modalUserData: null });
   };
 
-  handleFormSubmit = (values) => {
-    const { confpassword, password, ...filteredValues } = values;
+  handleCreateFormSubmit = (values) => {
+    const { confpassword, ...filteredValues } = values;
     createUserInCompany(filteredValues)
       .then(() => {
         this.setState({ modalVisible: false, modalUserData: null });
@@ -166,6 +166,21 @@ export class UserList extends Component {
         console.error("Error creating/updating user:", error);
         message.error("Failed to update user details.");
       });
+  };
+
+  handleUpdateFormSubmit = (values) => {
+    const { confpassword, ...filteredValues } = values;
+    console.log(values)
+    // createUserInCompany(filteredValues)
+    //   .then(() => {
+    //     this.setState({ modalVisible: false, modalUserData: null });
+    //     message.success("User details updated!");
+    //     this.loadUsers();
+    //   })
+    //   .catch((error) => {
+    //     console.error("Error creating/updating user:", error);
+    //     message.error("Failed to update user details.");
+    //   });
   };
 
   render() {
@@ -304,7 +319,7 @@ export class UserList extends Component {
         >
           <Form
             initialValues={modalUserData}
-            onFinish={this.handleFormSubmit}
+            onFinish={modalUserData ?  this.handleUpdateFormSubmit : this.handleCreateFormSubmit}
             layout="vertical"
           >
             <Form.Item
@@ -381,9 +396,16 @@ export class UserList extends Component {
           width="80%"
         >
           <Table
-            columns={[{ title: "Key", dataIndex: "key" }, { title: "Value", dataIndex: "value" }]}
+          className="small"
+            columns={[{ title: "", dataIndex: "key" }, { title: "", dataIndex: "value" }]}
+            rowClassName={(record, index) => (index % 2 === 0 ? "row-even" : "row-odd")}
             dataSource={userDetails}
             rowKey="key"
+          
+            rowHoverable={false}
+            pagination={false}
+            showHeader={false}
+            borderColor={"#000"}
           />
         </Modal>
 

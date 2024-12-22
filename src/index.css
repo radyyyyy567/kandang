@@ -1,0 +1,38 @@
+.row-odd {
+    
+    background-color: #f3f4f6;
+}
+.row-even {
+    background-color: white;
+}
+
+/* Add borders to columns */
+
+.small table {
+
+    border-top: 1px solid #d1d5db;
+    border-left: 1px solid #d1d5db;
+    border-bottom: 1px solid #d1d5db;
+    border-radius: 20px;
+}
+.small tr td {
+    border-left: 0.5px solid #d1d5db; /* Left border for columns */
+    
+  }
+  .small tr td:first-child {
+    border-left: none; /* Remove left border for the first td */
+  }
+
+  .small tr td:last-child {
+    border-right: 0.5px solid #d1d5db; /* Remove left border for the first td */
+  }
+
+  .small tr:first-child td:last-child {
+    border-top-right-radius: 20px;
+  }
+  .small tr:last-child td:last-child {
+    border-bottom-right-radius: 20px;
+  }
+
+  
+  

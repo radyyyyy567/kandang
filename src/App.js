@@ -7,7 +7,7 @@ import history from './history'
 import Layouts from './layouts'
 import { THEME_CONFIG } from './configs/AppConfig';
 import './lang'
-
+import "./index.css"
 const themes = {
   dark: `${process.env.PUBLIC_URL}/css/dark-theme.css`,
   light: `${process.env.PUBLIC_URL}/css/light-theme.css`,

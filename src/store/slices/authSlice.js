@@ -47,9 +47,10 @@ export const signUp = createAsyncThunk('auth/signUp',async (data, { rejectWithVa
 })
 
 export const signOut = createAsyncThunk('auth/signOut',async () => {
-    const response = await FirebaseService.signOutRequest()
+    
 	localStorage.removeItem(AUTH_TOKEN);
-    return response.data
+	console.log("hai kamu sudah logout")
+    return;
 })
 
 export const signInWithGoogle = createAsyncThunk('auth/signInWithGoogle', async (_, { rejectWithValue }) => {
