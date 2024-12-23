@@ -30,6 +30,15 @@
   .small tr:first-child td:last-child {
     border-top-right-radius: 20px;
   }
+
+  .small tr:first-child td:first-child {
+    border-top-left-radius: 20px;
+  }
+
+  .small tr:last-child td:first-child {
+    border-bottom-left-radius: 20px;
+  }
+
   .small tr:last-child td:last-child {
     border-bottom-right-radius: 20px;
   }
