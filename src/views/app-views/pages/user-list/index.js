@@ -19,15 +19,14 @@ import {
   PlusOutlined,
 } from "@ant-design/icons";
 import dayjs from "dayjs";
-import userData from "assets/data/user-list.data.json";
+
 import Search from "antd/es/input/Search";
 import UserView from "./UserView";
 import { fetchUsers, createUserInCompany, getUserDetails } from "api/user";
 
 export class UserList extends Component {
   state = {
-    users: userData,
-    filteredUsers: userData, // Data filtered based on search criteria
+    
     searchName: "",
     searchPosition: "",
     searchDivision: "",
@@ -105,7 +104,9 @@ export class UserList extends Component {
     try {
       this.setState({ detailVisible: true });
       const userData = await getUserDetails(userId);
+      
       const userDetails = [
+        
         {
           key: "Name",
           value: userData.name,
@@ -146,12 +147,63 @@ export class UserList extends Component {
     this.setState({ selectedUser: null });
   };
 
-  showModal = (userInfo) => {
-    this.setState({ modalVisible: true, modalUserData: userInfo });
+  showCreateModal = () => {
+    this.setState({ modalCreateVisible: true });
+  };
+
+  showUpdateModal = async (id) => {
+    try {
+      const userInfo = await getUserDetails(id);
+      console.log(userInfo)
+      const userTable = [
+        {
+          key: "Name",
+          value: <><div>{userInfo.name}</div><Button>Edit</Button></>,
+
+        },
+        {
+          key: "Email",
+          value: <><div>{userInfo.mail}</div><Button>Edit</Button></>,
+          
+        },
+        {
+          key: "Username",
+          value: <><div>{userInfo.username}</div><Button>Edit</Button></>,
+        },
+        {
+          key: "Password",
+          value: "*******",
+        },
+        
+      ];
+
+      const statusTable = [
+        {
+          key: "Division",
+          value: <><div>{userInfo.division.name}</div><Button>Edit</Button></>,
+        },
+        {
+          key: "Position",
+          value: <><div>{userInfo.position.name}</div><Button>Edit</Button></>,
+        
+        },
+        {
+          key: "Role",
+          value: <><div>{userInfo.role}</div><Button>Edit</Button></>,
+        
+        },
+      ];
+      
+      this.setState({ modalUpdateVisible: true, userTable, statusTable });  
+    } catch (error) {
+      console.error("Error fetching detail user:", error);
+      message.error("Failed to load detail user.");
+    }
+    
   };
 
   handleModalCancel = () => {
-    this.setState({ modalVisible: false, detailVisible: false, modalUserData: null });
+    this.setState({ modalCreateVisible: false, modalUpdateVisible: false, detailVisible: false, modalUserData: null });
   };
 
   handleCreateFormSubmit = (values) => {
@@ -188,17 +240,26 @@ export class UserList extends Component {
 
     const {
       filteredUsers,
-      modalVisible,
+      modalCreateVisible,
+      modalUpdateVisible,
       modalUserData,
       userProfileVisible,
       detailVisible,
       userDetails,
+      userTable,
+      statusTable,
+      userEdit,
       searchName,
       searchPosition,
       searchDivision,
     } = this.state;
 
     const tableColumns = [
+      {
+        title: 'ID',
+        dataIndex: 'id',
+        hidden: true, // Control visibility here
+      },
       {
         title: "Name",
         dataIndex: "name",
@@ -231,7 +292,7 @@ export class UserList extends Component {
                 style={{ backgroundColor: "green", color: "white" }}
                 className="mr-2"
                 icon={<EditOutlined />}
-                onClick={() => this.showModal(elm)}
+                onClick={() => this.showUpdateModal(elm.id)}
                 size="small"
               />
             </Tooltip>
@@ -298,7 +359,7 @@ export class UserList extends Component {
           <Button
             type="primary"
             icon={<PlusOutlined />}
-            onClick={() => this.showModal(null)}
+            onClick={() => this.showCreateModal(null)}
             style={{ fontWeight: "bold" }}
           >
             Add User
@@ -312,14 +373,14 @@ export class UserList extends Component {
 
         {/* User Profile Modal */}
         <Modal
-          title={modalUserData ? "Edit User" : "New User"}
-          visible={modalVisible}
+          title={"New User"}
+          visible={modalCreateVisible}
           onCancel={this.handleModalCancel}
           footer={null}
         >
           <Form
-            initialValues={modalUserData}
-            onFinish={modalUserData ?  this.handleUpdateFormSubmit : this.handleCreateFormSubmit}
+            
+            onFinish={this.handleCreateFormSubmit}
             layout="vertical"
           >
             <Form.Item
@@ -381,10 +442,46 @@ export class UserList extends Component {
             </Form.Item>
             <Form.Item>
               <Button type="primary" htmlType="submit">
-                {modalUserData ? "Save Changes" : "Add User"}
+                {"Add User"}
               </Button>
             </Form.Item>
           </Form>
+        </Modal>
+
+        <Modal
+          title={"Edit User"}
+         visible={modalUpdateVisible}
+         width="80%" 
+          onCancel={this.handleModalCancel}
+          footer={null}
+        >
+          <Table
+          className="small"
+          style={{marginBottom: '24px'}}
+            columns={[{ title: "", dataIndex: "key", width: '30%' }, { title: "", dataIndex: "value" }]}
+            rowClassName={(record, index) => (index % 2 === 0 ? "row-even" : "row-odd")}
+            dataSource={userTable}
+            rowKey="key"
+            
+            rowHoverable={false}
+            pagination={false}
+            showHeader={false}
+            borderColor={"#000"}
+          />
+          <Button style={{ marginBottom: "24px" }} danger >Change Password</Button>
+          <Table
+          className="small"
+          style={{marginBottom: '24px'}}
+            columns={[{ title: "", dataIndex: "key", width: '30%' }, { title: "", dataIndex: "value" }]}
+            rowClassName={(record, index) => (index % 2 === 0 ? "row-even" : "row-odd")}
+            dataSource={statusTable}
+            rowKey="key"
+          
+            rowHoverable={false}
+            pagination={false}
+            showHeader={false}
+            borderColor={"#000"}
+          />
         </Modal>
 
         {/* User Details Modal */}

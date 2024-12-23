@@ -25,6 +25,9 @@
 
   .small tr td:last-child {
     border-right: 0.5px solid #d1d5db; /* Remove left border for the first td */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 
   .small tr:first-child td:last-child {
