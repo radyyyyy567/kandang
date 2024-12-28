@@ -19,14 +19,13 @@ import {
   PlusOutlined,
 } from "@ant-design/icons";
 import dayjs from "dayjs";
-
 import Search from "antd/es/input/Search";
 import UserView from "./UserView";
 import { fetchUsers, createUserInCompany, getUserDetails } from "api/user";
+import EditUser from "./EditUser";
 
 export class UserList extends Component {
   state = {
-    
     searchName: "",
     searchPosition: "",
     searchDivision: "",
@@ -34,6 +33,7 @@ export class UserList extends Component {
     selectedUser: null,
     modalVisible: false,
     modalUserData: null, // To store user data for modal form
+    updateData: null,
   };
 
   componentDidMount() {
@@ -50,6 +50,10 @@ export class UserList extends Component {
       console.error("Error fetching users:", error);
       message.error("Failed to load users.");
     }
+  };
+
+  handleUpdate = () => {
+    console.log("Updated userInfo:");
   };
 
   handleSearch = () => {
@@ -72,6 +76,37 @@ export class UserList extends Component {
     this.setState({ filteredUsers });
   };
 
+  loadUsers = async () => {
+    try {
+      console.log("Fetching users...");
+      const usersData = await fetchUsers();
+      this.setState({ users: usersData, filteredUsers: usersData });
+    } catch (error) {
+      console.error("Error fetching users:", error);
+      message.error("Failed to load users.");
+    }
+  };
+
+  updateUserValue = (data, key, value) => {
+    if (!data || typeof data !== "object") {
+      console.error("Invalid data object provided");
+      return;
+    }
+
+    if (!key) {
+      console.error("Key is required to update the object");
+      return;
+    }
+
+    // Create a shallow copy of the data object and update the key
+    const updatedData = { ...data, [key]: value };
+
+    // Example: Set the updated data back to the state or use it as needed
+    this.setState({ update: updatedData });
+
+    message.success(`Updated ${key} to "${value}"`);
+  };
+
   handleInputChange = (e) => {
     this.setState({ [e.target.name]: e.target.value }, this.handleSearch);
   };
@@ -90,7 +125,9 @@ export class UserList extends Component {
       onOk: () => {
         this.setState({
           users: this.state.users.filter((item) => item.id !== userId),
-          filteredUsers: this.state.filteredUsers.filter((item) => item.id !== userId),
+          filteredUsers: this.state.filteredUsers.filter(
+            (item) => item.id !== userId
+          ),
         });
         message.success({ content: `Deleted user ${userId}`, duration: 2 });
       },
@@ -104,9 +141,8 @@ export class UserList extends Component {
     try {
       this.setState({ detailVisible: true });
       const userData = await getUserDetails(userId);
-      
+
       const userDetails = [
-        
         {
           key: "Name",
           value: userData.name,
@@ -154,56 +190,88 @@ export class UserList extends Component {
   showUpdateModal = async (id) => {
     try {
       const userInfo = await getUserDetails(id);
-      console.log(userInfo)
+      console.log(userInfo);
       const userTable = [
         {
           key: "Name",
-          value: <><div>{userInfo.name}</div><Button>Edit</Button></>,
-
+          value: (
+            <EditUser
+              keyName="name"
+              value={userInfo.name}
+              handleValue={this.updateUserValue}
+            />
+          ),
         },
         {
           key: "Email",
-          value: <><div>{userInfo.mail}</div><Button>Edit</Button></>,
-          
+          value: (
+            <EditUser
+              keyName="name"
+              value={userInfo.mail}
+              handleValue={this.updateUserValue}
+            />
+          ),
         },
         {
           key: "Username",
-          value: <><div>{userInfo.username}</div><Button>Edit</Button></>,
+          value: (
+            <EditUser
+              keyName="name"
+              value={userInfo.username}
+              handleValue={this.updateUserValue}
+            />
+          ),
         },
         {
           key: "Password",
           value: "*******",
         },
-        
       ];
 
       const statusTable = [
         {
           key: "Division",
-          value: <><div>{userInfo.division.name}</div><Button>Edit</Button></>,
+          value: (
+            <>
+              <div>{userInfo.division.name}</div>
+              <Button>Edit</Button>
+            </>
+          ),
         },
         {
           key: "Position",
-          value: <><div>{userInfo.position.name}</div><Button>Edit</Button></>,
-        
+          value: (
+            <>
+              <div>{userInfo.position.name}</div>
+              <Button>Edit</Button>
+            </>
+          ),
         },
         {
           key: "Role",
-          value: <><div>{userInfo.role}</div><Button>Edit</Button></>,
-        
+          value: (
+            <>
+              <div>{userInfo.role}</div>
+              <Button>Edit</Button>
+            </>
+          ),
         },
       ];
-      
-      this.setState({ modalUpdateVisible: true, userTable, statusTable });  
+
+      this.setState({ modalUpdateVisible: true, userTable, statusTable });
     } catch (error) {
       console.error("Error fetching detail user:", error);
       message.error("Failed to load detail user.");
     }
-    
   };
 
   handleModalCancel = () => {
-    this.setState({ modalCreateVisible: false, modalUpdateVisible: false, detailVisible: false, modalUserData: null });
+    this.setState({
+      modalCreateVisible: false,
+      modalUpdateVisible: false,
+      detailVisible: false,
+      modalUserData: null,
+    });
   };
 
   handleCreateFormSubmit = (values) => {
@@ -222,7 +290,7 @@ export class UserList extends Component {
 
   handleUpdateFormSubmit = (values) => {
     const { confpassword, ...filteredValues } = values;
-    console.log(values)
+    console.log(values);
     // createUserInCompany(filteredValues)
     //   .then(() => {
     //     this.setState({ modalVisible: false, modalUserData: null });
@@ -256,8 +324,8 @@ export class UserList extends Component {
 
     const tableColumns = [
       {
-        title: 'ID',
-        dataIndex: 'id',
+        title: "ID",
+        dataIndex: "id",
         hidden: true, // Control visibility here
       },
       {
@@ -340,7 +408,9 @@ export class UserList extends Component {
             showSearch
             placeholder="Search by Position"
             value={searchPosition}
-            onChange={(value) => this.handleSelectChange("searchPosition", value)}
+            onChange={(value) =>
+              this.handleSelectChange("searchPosition", value)
+            }
             style={{ width: "100%" }}
           >
             <Option value="Admin">Admin</Option>
@@ -350,7 +420,9 @@ export class UserList extends Component {
             showSearch
             placeholder="Search by Division"
             value={searchDivision}
-            onChange={(value) => this.handleSelectChange("searchDivision", value)}
+            onChange={(value) =>
+              this.handleSelectChange("searchDivision", value)
+            }
             style={{ width: "100%" }}
           >
             <Option value="Division 1">Division 1</Option>
@@ -368,7 +440,11 @@ export class UserList extends Component {
 
         {/* Table */}
         <div className="table-responsive my-4 border rounded-lg">
-          <Table columns={tableColumns} dataSource={filteredUsers} rowKey="id" />
+          <Table
+            columns={tableColumns}
+            dataSource={filteredUsers}
+            rowKey="id"
+          />
         </div>
 
         {/* User Profile Modal */}
@@ -378,43 +454,55 @@ export class UserList extends Component {
           onCancel={this.handleModalCancel}
           footer={null}
         >
-          <Form
-            
-            onFinish={this.handleCreateFormSubmit}
-            layout="vertical"
-          >
+          <Form onFinish={this.handleCreateFormSubmit} layout="vertical">
             <Form.Item
               label="Name"
               name="name"
-              rules={[{ required: true, message: "Please enter the user's name" }]}
+              rules={[
+                { required: true, message: "Please enter the user's name" },
+              ]}
             >
               <Input />
             </Form.Item>
             <Form.Item
               label="Username"
               name="username"
-              rules={[{ required: true, message: "Please enter the user's username" }]}
+              rules={[
+                { required: true, message: "Please enter the user's username" },
+              ]}
             >
               <Input />
             </Form.Item>
             <Form.Item
               label="Password"
               name="password"
-              rules={[{ required: true, message: "Please enter the user's password" }]}
+              rules={[
+                { required: true, message: "Please enter the user's password" },
+              ]}
             >
               <Input type="password" />
             </Form.Item>
             <Form.Item
               label="Confirm Password"
               name="confpassword"
-              rules={[{ required: true, message: "Please confirm the user's password" }]}
+              rules={[
+                {
+                  required: true,
+                  message: "Please confirm the user's password",
+                },
+              ]}
             >
               <Input type="password" />
             </Form.Item>
             <Form.Item
               label="Position"
               name="id_position"
-              rules={[{ required: true, message: "Please select the user's position!" }]}
+              rules={[
+                {
+                  required: true,
+                  message: "Please select the user's position!",
+                },
+              ]}
             >
               <Select>
                 <Option value="1">Admin</Option>
@@ -424,7 +512,12 @@ export class UserList extends Component {
             <Form.Item
               label="Division"
               name="id_division"
-              rules={[{ required: true, message: "Please select the user's division!" }]}
+              rules={[
+                {
+                  required: true,
+                  message: "Please select the user's division!",
+                },
+              ]}
             >
               <Select>
                 <Option value="1">Division 1</Option>
@@ -435,7 +528,10 @@ export class UserList extends Component {
               label="Email"
               name="mail"
               rules={[
-                { type: "email", message: "Please enter a valid email address" },
+                {
+                  type: "email",
+                  message: "Please enter a valid email address",
+                },
               ]}
             >
               <Input />
@@ -450,33 +546,43 @@ export class UserList extends Component {
 
         <Modal
           title={"Edit User"}
-         visible={modalUpdateVisible}
-         width="80%" 
+          visible={modalUpdateVisible}
+          width="80%"
           onCancel={this.handleModalCancel}
           footer={null}
         >
           <Table
-          className="small"
-          style={{marginBottom: '24px'}}
-            columns={[{ title: "", dataIndex: "key", width: '30%' }, { title: "", dataIndex: "value" }]}
-            rowClassName={(record, index) => (index % 2 === 0 ? "row-even" : "row-odd")}
+            className="small"
+            style={{ marginBottom: "24px" }}
+            columns={[
+              { title: "", dataIndex: "key", width: "30%" },
+              { title: "", dataIndex: "value" },
+            ]}
+            rowClassName={(record, index) =>
+              index % 2 === 0 ? "row-even" : "row-odd"
+            }
             dataSource={userTable}
             rowKey="key"
-            
             rowHoverable={false}
             pagination={false}
             showHeader={false}
             borderColor={"#000"}
           />
-          <Button style={{ marginBottom: "24px" }} danger >Change Password</Button>
+          <Button style={{ marginBottom: "24px" }} danger>
+            Change Password
+          </Button>
           <Table
-          className="small"
-          style={{marginBottom: '24px'}}
-            columns={[{ title: "", dataIndex: "key", width: '30%' }, { title: "", dataIndex: "value" }]}
-            rowClassName={(record, index) => (index % 2 === 0 ? "row-even" : "row-odd")}
+            className="small"
+            style={{ marginBottom: "24px" }}
+            columns={[
+              { title: "", dataIndex: "key", width: "30%" },
+              { title: "", dataIndex: "value" },
+            ]}
+            rowClassName={(record, index) =>
+              index % 2 === 0 ? "row-even" : "row-odd"
+            }
             dataSource={statusTable}
             rowKey="key"
-          
             rowHoverable={false}
             pagination={false}
             showHeader={false}
@@ -493,12 +599,16 @@ export class UserList extends Component {
           width="80%"
         >
           <Table
-          className="small"
-            columns={[{ title: "", dataIndex: "key" }, { title: "", dataIndex: "value" }]}
-            rowClassName={(record, index) => (index % 2 === 0 ? "row-even" : "row-odd")}
+            className="small"
+            columns={[
+              { title: "", dataIndex: "key" },
+              { title: "", dataIndex: "value" },
+            ]}
+            rowClassName={(record, index) =>
+              index % 2 === 0 ? "row-even" : "row-odd"
+            }
             dataSource={userDetails}
             rowKey="key"
-          
             rowHoverable={false}
             pagination={false}
             showHeader={false}
