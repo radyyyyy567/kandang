@@ -2,18 +2,34 @@ import React, { Component } from "react";
 import { Card, Table, Tag, Tooltip, message, Button, Select, Modal, Form } from "antd";
 import { EyeOutlined, DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
-import UserView from "./UserView";
+
 import AvatarStatus from "components/shared-components/AvatarStatus";
-import data from "assets/data/position-list.data.json";
 import { Input } from "antd";
+import { createData, fetchDatas } from "api/position";
 export class UserList extends Component {
   state = {
-    datas: data,
+    datas: null,
     dataProfileVisible: false,
     selectedData: null,
     modalData: null,
     modalVisible: false,
     detailVisible: false,
+  };
+
+  componentDidMount() {
+    this.loadDatas()
+  }
+
+  loadDatas = async () => {
+    try {
+      console.log("Fetching data...");
+      const data = await fetchDatas();
+      console.log("hai", data)
+      this.setState({ datas: data, filteredDatas: data });
+    } catch (error) {
+      console.error("Error fetching users:", error);
+      message.error("Failed to load users.");
+    }
   };
 
   delete = (userId) => {
@@ -71,14 +87,22 @@ export class UserList extends Component {
     });
   };
 
-  handleFormSubmit = (values) => {
-    // Handle form submission here (edit user, add user, etc.)
-    console.log("Form Values:", values);
+  handleCreateSubmit = (values) => {
+    console.log("meow")
+    createData(values)
+      .then(() => {
+        this.setState({ modalVisible: false, modalData: null });
+        this.loadDatas();
+      })
+      .catch((error) => {
+        console.error("Error creating position:", error);
+        message.error("Failed to create new position.");
+      });
     this.setState({
       modalVisible: false,
       modalData: null,
     });
-    message.success("User details updated!");
+    message.success("Position created!");
   };
 
   render() {
@@ -94,21 +118,21 @@ export class UserList extends Component {
     } = this.state;
     const tableColumns = [
       {
-        title: "Position",
-        dataIndex: "role",
-        sorter: (a, b) => a.role.localeCompare(b.role), // Alphabetic sorting for positions
+        title: "Name",
+        dataIndex: "name",
+        sorter: (a, b) => a.role.localeCompare(b.role), 
       },
       {
-        title: "Last online",
-        dataIndex: "lastOnline",
-        render: (date) => <span>{dayjs.unix(date).format("MM/DD/YYYY")} </span>,
-        sorter: (a, b) => dayjs(a.lastOnline).unix() - dayjs(b.lastOnline).unix(),
+        title: "Last Updated",
+        dataIndex: "updated_at",
+        render: (date) => <span>{new Date(date).toLocaleDateString()}</span>,
+        
       },
       {
         title: "Action",
         dataIndex: "actions",
         render: (_, elm) => (
-          <div className="text-right d-flex justify-content-end">
+          <div className="text-right d-flex justify-content-start">
             <Tooltip title="Edit">
               <Button
                 style={{ backgroundColor: "green", color: "white" }}
@@ -136,7 +160,7 @@ export class UserList extends Component {
                 danger
                 icon={<DeleteOutlined />}
                 onClick={() => {
-                  this.delete(elm.id);
+                  this.deleteUser(elm.id);
                 }}
                 size="small"
               />
@@ -144,7 +168,7 @@ export class UserList extends Component {
           </div>
         ),
       },
-    ]; 
+    ];
     const detailedData = [
       { id: 1, name: "Anderson",  username: "andy", division: "Division 1"},
       { id: 1, name: "Matthew", username: "matt", division: "Division 1"},
@@ -217,21 +241,21 @@ export class UserList extends Component {
         >
           <Form
             initialValues={modalData}
-            onFinish={this.handleFormSubmit}
+            onFinish={this.handleCreateSubmit}
             layout="vertical"
           >
             <Form.Item
               label="Position"
-              name="role"
+              name="name"
               rules={[
-                { required: true, message: "Please enter the user's name" },
+                { required: true, message: "Please enter the position's name" },
               ]}
             >
               <Input />
             </Form.Item>
             
             <Button type="primary" htmlType="submit" block>
-              {modalData ? "Save Changes" : "Create User"}
+              {modalData ? "Save Changes" : "Create Position"}
             </Button>
           </Form>
         </Modal>
@@ -248,13 +272,7 @@ export class UserList extends Component {
             rowKey="id"
           />
         </Modal>
-        <UserView
-          data={selectedData}
-          visible={userProfileVisible}
-          close={() => {
-            this.closeUserProfile();
-          }}
-        />
+        
       </div>
     );
   }
