@@ -18,18 +18,34 @@ import {
 } from "@ant-design/icons";
 import dayjs from "dayjs";
 import UserView from "./UserView";
-import AvatarStatus from "components/shared-components/AvatarStatus";
-import data from "assets/data/henhouse-list.data.json";
 import { Input } from "antd";
+import { fetchDatas } from "api/henhouse";
 export class UserList extends Component {
   state = {
-    datas: data,
+    datas: null,
     dataProfileVisible: false,
     selectedData: null,
     modalData: null,
     modalVisible: false,
     detailVisible: false,
   };
+
+  componentDidMount() {
+    this.loadDatas()
+  }
+
+  loadDatas = async () => {
+    try {
+      console.log("Fetching data...");
+      const data = await fetchDatas();
+      console.log("hai", data)
+      this.setState({ datas: data, filteredDatas: data });
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      message.error("Failed to load data.");
+    }
+  };
+
 
   delete = (userId) => {
     Modal.confirm({
@@ -109,8 +125,8 @@ export class UserList extends Component {
     } = this.state;
     const tableColumns = [
       {
-        title: "Hen House",
-        dataIndex: "henhouse",
+        title: "Name",
+        dataIndex: "name",
         sorter: (a, b) => a.role.localeCompare(b.role), // Alphabetic sorting for positions
       },
       {

@@ -19,16 +19,33 @@ import {
 import dayjs from "dayjs";
 import UserView from "./UserView";
 import AvatarStatus from "components/shared-components/AvatarStatus";
-import data from "assets/data/product-list.data.json";
 import { Input } from "antd";
+import { fetchDatas } from "api/position";
+
 export class UserList extends Component {
   state = {
-    datas: data,
+    datas: null,
     dataProfileVisible: false,
     selectedData: null,
     modalData: null,
     modalVisible: false,
     detailVisible: false,
+  };
+
+  componentDidMount() {
+    this.loadDatas()
+  }
+
+  loadDatas = async () => {
+    try {
+      console.log("Fetching data...");
+      const data = await fetchDatas();
+      console.log("hai", data)
+      this.setState({ datas: data, filteredDatas: data });
+    } catch (error) {
+      console.error("Error fetching users:", error);
+      message.error("Failed to load users.");
+    }
   };
 
   delete = (userId) => {
