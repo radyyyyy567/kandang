@@ -1,7 +1,9 @@
-import { Button, Input } from "antd";
+import { Button, Select } from "antd";
 import React, { useState } from "react";
 
-const EditUser = ({ keyName, value, handleValue, id }) => {
+const { Option } = Select;
+
+const EditStatus = ({ keyName, value, handleValue, id }) => {
   const [editOn, setEditOn] = useState(false);
   const [currentValue, setCurrentValue] = useState(value);
 
@@ -9,8 +11,10 @@ const EditUser = ({ keyName, value, handleValue, id }) => {
     setEditOn(!editOn);
   };
 
-  const handleInputChange = (e) => {
-    setCurrentValue(e.target.value);
+  
+
+  const handleSelectChange = (value) => {
+    setCurrentValue(value);
   };
 
   const saveChanges = () => {
@@ -18,17 +22,21 @@ const EditUser = ({ keyName, value, handleValue, id }) => {
     toggleEdit(); // Exit edit mode
   };
 
-
-  
   return editOn ? (
     <>
-      <Input
+      <Select
         value={currentValue}
-        onChange={handleInputChange}
-        style={{ margin: "0 24px 0 -8px", paddingLeft: "8px", paddingRight: "8px" }}
+        onChange={handleSelectChange}
+        style={{ margin: "0 24px 0 -8px", width: "200px" }}
         autoFocus
-      />
-      <Button type="primary" onClick={() => saveChanges()} style={{ marginRight: 8 }}>
+      >
+        {options.map((option) => (
+          <Option key={option.value} value={option.value}>
+            {option.label}
+          </Option>
+        ))}
+      </Select>
+      <Button type="primary" onClick={saveChanges} style={{ marginRight: 8 }}>
         Save
       </Button>
       <Button onClick={toggleEdit}>Cancel</Button>
@@ -41,4 +49,4 @@ const EditUser = ({ keyName, value, handleValue, id }) => {
   );
 };
 
-export default EditUser;
+export default EditStatus;

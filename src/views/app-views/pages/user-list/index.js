@@ -10,6 +10,7 @@ import {
   Form,
   Input,
   Select,
+  Spin,
 } from "antd";
 
 import {
@@ -21,8 +22,15 @@ import {
 import dayjs from "dayjs";
 import Search from "antd/es/input/Search";
 import UserView from "./UserView";
-import { fetchUsers, createUserInCompany, getUserDetails } from "api/user";
+import {
+  fetchUsers,
+  createUserInCompany,
+  getUserDetails,
+  updateUserById,
+} from "api/user";
 import EditUser from "./EditUser";
+import { fetchDatas as fetchPosition } from "api/position";
+import { fetchDatas as fetchDivision } from "api/division";
 
 export class UserList extends Component {
   state = {
@@ -34,10 +42,15 @@ export class UserList extends Component {
     modalVisible: false,
     modalUserData: null, // To store user data for modal form
     updateData: null,
+    popupLoad: false,
+    optionPosition: null,
+    optionDivision: null,
   };
 
   componentDidMount() {
     this.loadUsers(); // Call the method to fetch users on component mount
+    this.loadPositions();
+    this.loadDivisions();
   }
 
   // Method to fetch users and set state
@@ -49,6 +62,28 @@ export class UserList extends Component {
     } catch (error) {
       console.error("Error fetching users:", error);
       message.error("Failed to load users.");
+    }
+  };
+
+  loadPositions = async () => {
+    try {
+      console.log("Fetching poisitions...");
+      const dataPoisition = await fetchPosition();
+      this.setState({  optionPosition: dataPoisition });
+    } catch (error) {
+      console.error("Error fetching positions:", error);
+      message.error("Failed to load positions.");
+    }
+  };
+
+  loadDivisions = async () => {
+    try {
+      console.log("Fetching divisions...");
+      const dataDivision = await fetchDivision();
+      this.setState({ optionDivision: dataDivision });
+    } catch (error) {
+      console.error("Error fetching divisions:", error);
+      message.error("Failed to load divisions.");
     }
   };
 
@@ -87,24 +122,49 @@ export class UserList extends Component {
     }
   };
 
-  updateUserValue = (data, key, value) => {
-    if (!data || typeof data !== "object") {
-      console.error("Invalid data object provided");
-      return;
+  updateUserValue = async (id, key, value) => {
+    this.setState({ popupLoad: true });
+    let data;
+    try {
+      data = await getUserDetails(id);
+    } catch (error) {
+      message.error("User not Found");
     }
 
     if (!key) {
       console.error("Key is required to update the object");
       return;
     }
-
+    const dataChange = {
+      role: data.role,
+      username: data.username,
+      name: data.name,
+      mail: data.mail,
+      id_position: data.position.id,
+      id_division: data.division.id,
+    };
+    console.log(value);
     // Create a shallow copy of the data object and update the key
-    const updatedData = { ...data, [key]: value };
+    const updatedData = { ...dataChange, [key]: value };
 
+    try {
+      // Call the API to update user details
+      const response = await updateUserById(id, updatedData);
+
+      // Show success message
+      message.success("User updated successfully!");
+      console.log("User updated successfully:", response);
+      this.loadUsers();
+      // Additional actions, e.g., update the UI
+    } catch (error) {
+      // Show error message
+      message.error(`Failed to update user: ${error.message}`);
+      console.error("Error while updating user:", error.message);
+    }
+
+    this.setState({ popupLoad: false });
     // Example: Set the updated data back to the state or use it as needed
     this.setState({ update: updatedData });
-
-    message.success(`Updated ${key} to "${value}"`);
   };
 
   handleInputChange = (e) => {
@@ -190,7 +250,7 @@ export class UserList extends Component {
   showUpdateModal = async (id) => {
     try {
       const userInfo = await getUserDetails(id);
-      console.log(userInfo);
+
       const userTable = [
         {
           key: "Name",
@@ -199,6 +259,7 @@ export class UserList extends Component {
               keyName="name"
               value={userInfo.name}
               handleValue={this.updateUserValue}
+              id={id}
             />
           ),
         },
@@ -206,9 +267,10 @@ export class UserList extends Component {
           key: "Email",
           value: (
             <EditUser
-              keyName="name"
+              keyName="Email"
               value={userInfo.mail}
               handleValue={this.updateUserValue}
+              id={id}
             />
           ),
         },
@@ -216,9 +278,10 @@ export class UserList extends Component {
           key: "Username",
           value: (
             <EditUser
-              keyName="name"
+              keyName="Username"
               value={userInfo.username}
               handleValue={this.updateUserValue}
+              id={id}
             />
           ),
         },
@@ -320,6 +383,9 @@ export class UserList extends Component {
       searchName,
       searchPosition,
       searchDivision,
+      popupLoad,
+      optionDivision,
+      optionPosition
     } = this.state;
 
     const tableColumns = [
@@ -332,6 +398,7 @@ export class UserList extends Component {
         title: "Name",
         dataIndex: "name",
         sorter: (a, b) => a.name.localeCompare(b.name),
+        defaultSortOrder: "ascend",
       },
       {
         title: "Username",
@@ -413,8 +480,14 @@ export class UserList extends Component {
             }
             style={{ width: "100%" }}
           >
-            <Option value="Admin">Admin</Option>
-            <Option value="Employee">Employee</Option>
+             <Option value="">Search by Position</Option>
+           {optionPosition && optionPosition.map((option) => (
+               
+              <Option key={option.id} value={option.id}>
+                {option.name}
+              </Option>
+        )) }
+         
           </Select>
           <Select
             showSearch
@@ -425,8 +498,13 @@ export class UserList extends Component {
             }
             style={{ width: "100%" }}
           >
-            <Option value="Division 1">Division 1</Option>
-            <Option value="Division 2">Division 2</Option>
+              <Option value="">Search by Division</Option>
+           {optionDivision && optionDivision.map((option) => (
+               
+              <Option key={option.id} value={option.id}>
+                {option.name}
+              </Option>
+        )) }
           </Select>
           <Button
             type="primary"
@@ -453,6 +531,7 @@ export class UserList extends Component {
           visible={modalCreateVisible}
           onCancel={this.handleModalCancel}
           footer={null}
+          destroyOnClose
         >
           <Form onFinish={this.handleCreateFormSubmit} layout="vertical">
             <Form.Item
@@ -505,8 +584,12 @@ export class UserList extends Component {
               ]}
             >
               <Select>
-                <Option value="1">Admin</Option>
-                <Option value="2">Employee</Option>
+              {optionPosition && optionPosition.map((option) => (
+               
+               <Option key={option.id} value={option.id}>
+                 {option.name}
+               </Option>
+         )) }
               </Select>
             </Form.Item>
             <Form.Item
@@ -520,8 +603,12 @@ export class UserList extends Component {
               ]}
             >
               <Select>
-                <Option value="1">Division 1</Option>
-                <Option value="2">Division 2</Option>
+              {optionDivision && optionDivision.map((option) => (
+               
+               <Option key={option.id} value={option.id}>
+                 {option.name}
+               </Option>
+         )) }
               </Select>
             </Form.Item>
             <Form.Item
@@ -543,52 +630,57 @@ export class UserList extends Component {
             </Form.Item>
           </Form>
         </Modal>
-
-        <Modal
-          title={"Edit User"}
-          visible={modalUpdateVisible}
-          width="80%"
-          onCancel={this.handleModalCancel}
-          footer={null}
-        >
-          <Table
-            className="small"
-            style={{ marginBottom: "24px" }}
-            columns={[
-              { title: "", dataIndex: "key", width: "30%" },
-              { title: "", dataIndex: "value" },
-            ]}
-            rowClassName={(record, index) =>
-              index % 2 === 0 ? "row-even" : "row-odd"
-            }
-            dataSource={userTable}
-            rowKey="key"
-            rowHoverable={false}
-            pagination={false}
-            showHeader={false}
-            borderColor={"#000"}
-          />
-          <Button style={{ marginBottom: "24px" }} danger>
-            Change Password
-          </Button>
-          <Table
-            className="small"
-            style={{ marginBottom: "24px" }}
-            columns={[
-              { title: "", dataIndex: "key", width: "30%" },
-              { title: "", dataIndex: "value" },
-            ]}
-            rowClassName={(record, index) =>
-              index % 2 === 0 ? "row-even" : "row-odd"
-            }
-            dataSource={statusTable}
-            rowKey="key"
-            rowHoverable={false}
-            pagination={false}
-            showHeader={false}
-            borderColor={"#000"}
-          />
-        </Modal>
+       
+          <Modal
+            title={"Edit User"}
+            visible={modalUpdateVisible}
+            width="80%"
+            onCancel={this.handleModalCancel}
+            footer={null}
+            destroyOnClose
+          >
+            <Spin spinning={popupLoad}>
+            <Table
+              className="small"
+              style={{ marginBottom: "24px" }}
+              columns={[
+                { title: "", dataIndex: "key", width: "30%" },
+                { title: "", dataIndex: "value" },
+              ]}
+              rowClassName={(record, index) =>
+                index % 2 === 0 ? "row-even" : "row-odd"
+              }
+              dataSource={userTable}
+              rowKey="key"
+              rowHoverable={false}
+              pagination={false}
+              showHeader={false}
+              borderColor={"#000"}
+            />
+            <Button style={{ marginBottom: "24px" }} danger>
+              Change Password
+            </Button>
+            
+            <Table
+              className="small"
+              style={{ marginBottom: "24px" }}
+              columns={[
+                { title: "", dataIndex: "key", width: "30%" },
+                { title: "", dataIndex: "value" },
+              ]}
+              rowClassName={(record, index) =>
+                index % 2 === 0 ? "row-even" : "row-odd"
+              }
+              dataSource={statusTable}
+              rowKey="key"
+              rowHoverable={false}
+              pagination={false}
+              showHeader={false}
+              borderColor={"#000"}
+            />
+            </Spin>
+          </Modal>
+        
 
         {/* User Details Modal */}
         <Modal
@@ -596,8 +688,10 @@ export class UserList extends Component {
           visible={detailVisible}
           onCancel={this.handleModalCancel}
           footer={null}
+          destroyOnClose
           width="80%"
         >
+          
           <Table
             className="small"
             columns={[
@@ -616,12 +710,7 @@ export class UserList extends Component {
           />
         </Modal>
 
-        {/* User Profile Viewer */}
-        <UserView
-          data={this.state.selectedUser}
-          visible={userProfileVisible}
-          close={this.closeUserProfile}
-        />
+
       </div>
     );
   }
