@@ -111,3 +111,34 @@ export const updateUserById = async (userId, updateData) => {
     throw error; // Propagate the error
   }
 };
+
+export const deleteUserById = async (userId) => {
+  try {
+    if (!userId) {
+      throw new Error("User ID is required.");
+    }
+
+    // Retrieve the token from localStorage or cookies
+    const token = localStorage.getItem('auth_token');
+    if (!token) {
+      throw new Error("Authorization token not found.");
+    }
+
+    // API call to update user details
+    const response = await axios.delete(
+      `http://100.114.201.121:8093/api/user/v1/deleteUserById/${userId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    // Return the response data
+    return response.data;
+  } catch (error) {
+    console.error(`Error delete user for ID ${userId}:`, error.message);
+    throw error; // Propagate the error
+  }
+};
