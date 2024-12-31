@@ -69,24 +69,9 @@ const MenuItemSignOut = (props) => {
 const items = [
   {
     key: 'Edit Profile',
-    label: <MenuItem path="/" label="Edit Profile" icon={<EditOutlined />} />,
+    label: <MenuItem path="/app/profile" label="Edit Profile" icon={<EditOutlined />} />,
   },
-  {
-    key: 'Account Setting',
-    label: <MenuItem path="/" label="Account Setting" icon={<SettingOutlined />} />,
-  },
-  {
-    key: 'Account Billing',
-    label: <MenuItem path="/" label="Account Billing" icon={<ShopOutlined />} />,
-  },
-  {
-    key: 'Help Center',
-    label: <MenuItem path="/" label="Help Center" icon={<QuestionCircleOutlined />} />,
-  },
-  {
-    key: 'Sign Out',
-    label: <MenuItemSignOut label="Sign Out" />,
-  },
+  
 ];
 
 export const NavProfile = ({ mode }) => {

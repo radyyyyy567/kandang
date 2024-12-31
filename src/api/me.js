@@ -45,3 +45,35 @@ export const fetchMe = async () => {
     throw error;
   }
 };
+
+export const updateMe = async (updateData) => {
+  try {
+    if (!updateData || typeof updateData !== "object") {
+      throw new Error("Update data must be a valid object.");
+    }
+
+    // Retrieve the token from localStorage or cookies
+    const token = localStorage.getItem('auth_token');
+    if (!token) {
+      throw new Error("Authorization token not found.");
+    }
+
+    // API call to update user details
+    const response = await axios.put(
+      `http://100.114.201.121:8093/api/user/v1/updateMyDetails`,
+      updateData, // Body payload for the update
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    // Return the response data
+    return response.data;
+  } catch (error) {
+    console.error(`Error updating user:`, error.message);
+    throw error; // Propagate the error
+  }
+};

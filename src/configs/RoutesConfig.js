@@ -42,41 +42,14 @@ export const publicRoutes = [
         path: `${AUTH_PREFIX_PATH}/error-page-2`,
         component: React.lazy(() => import('views/auth-views/errors/error-page-2')),
     },
+    
 ]
 
 export const protectedRoutes = [
-    
     {
-        key: 'login-1',
-        path: `${APP_PREFIX_PATH}/login-1`,
-        component: React.lazy(() => import('views/auth-views/authentication/login-1')),
-        meta: {
-            blankLayout: true
-        }
-    },
-    {
-        key: 'login-2',
-        path: `${APP_PREFIX_PATH}/login-2`,
-        component: React.lazy(() => import('views/auth-views/authentication/login-2')),
-        meta: {
-            blankLayout: true
-        }
-    },
-    {
-        key: 'register-1',
-        path: `${APP_PREFIX_PATH}/register-1`,
-        component: React.lazy(() => import('views/auth-views/authentication/register-1')),
-        meta: {
-            blankLayout: true
-        }
-    },
-    {
-        key: 'register-2',
-        path: `${APP_PREFIX_PATH}/register-2`,
-        component: React.lazy(() => import('views/auth-views/authentication/register-2')),
-        meta: {
-            blankLayout: true
-        }
+        key: 'pages.profile',
+        path: `${APP_PREFIX_PATH}/profile`,
+        component: React.lazy(() => import('views/app-views/pages/profile')),
     },
     {
         key: 'forgot-password',
