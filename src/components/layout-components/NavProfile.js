@@ -1,30 +1,35 @@
-import React, { useState, useEffect } from 'react';
-import { Dropdown, Avatar } from 'antd';
-import { useDispatch } from 'react-redux';
+import React, { useState, useEffect } from "react";
+import { Dropdown, Avatar } from "antd";
+import { useDispatch } from "react-redux";
 import {
   EditOutlined,
   SettingOutlined,
   ShopOutlined,
   QuestionCircleOutlined,
   LogoutOutlined,
-} from '@ant-design/icons';
-import styled from '@emotion/styled';
-import { signOut } from 'store/slices/authSlice';
-import NavItem from './NavItem';
-import Flex from 'components/shared-components/Flex';
-import { FONT_WEIGHT, MEDIA_QUERIES, SPACER, FONT_SIZES } from 'constants/ThemeConstant';
-import { fetchMe } from 'api/me';
+} from "@ant-design/icons";
+import styled from "@emotion/styled";
+import { signOut } from "store/slices/authSlice";
+import NavItem from "./NavItem";
+import Flex from "components/shared-components/Flex";
+import {
+  FONT_WEIGHT,
+  MEDIA_QUERIES,
+  SPACER,
+  FONT_SIZES,
+} from "constants/ThemeConstant";
+import { fetchMe } from "api/me";
 
 const Icon = styled.div(() => ({
   fontSize: FONT_SIZES.LG,
 }));
 
 const Profile = styled.div(() => ({
-  display: 'flex',
-  alignItems: 'center',
+  display: "flex",
+  alignItems: "center",
 }));
 
-const UserInfo = styled('div')`
+const UserInfo = styled("div")`
   padding-left: ${SPACER[2]};
 
   @media ${MEDIA_QUERIES.MOBILE} {
@@ -68,14 +73,23 @@ const MenuItemSignOut = (props) => {
 
 const items = [
   {
-    key: 'Edit Profile',
-    label: <MenuItem path="/app/profile" label="Edit Profile" icon={<EditOutlined />} />,
+    key: "Edit Profile",
+    label: (
+      <MenuItem
+        path="/app/profile"
+        label="Edit Profile"
+        icon={<EditOutlined />}
+      />
+    ),
   },
-  
+  {
+    key: "Sign Out",
+    label: <MenuItemSignOut label="Sign Out" />,
+  },
 ];
 
 export const NavProfile = ({ mode }) => {
-  const [userInfo, setUserInfo] = useState({ name: '', role: '' });
+  const [userInfo, setUserInfo] = useState({ name: "", role: "" });
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -83,7 +97,7 @@ export const NavProfile = ({ mode }) => {
         const response = await fetchMe(); // Call the me API
         setUserInfo({ name: response.name, role: response.role });
       } catch (error) {
-        console.error('Failed to fetch user info:', error);
+        console.error("Failed to fetch user info:", error);
       }
     };
 
@@ -91,7 +105,7 @@ export const NavProfile = ({ mode }) => {
   }, []);
 
   return (
-    <Dropdown placement="bottomRight" menu={{ items }} trigger={['click']}>
+    <Dropdown placement="bottomRight" menu={{ items }} trigger={["click"]}>
       <NavItem mode={mode}>
         <Profile>
           <Avatar src="/img/avatars/thumb-1.jpg" />
