@@ -64,6 +64,7 @@ export class UserList extends Component {
     try {
       console.log("Fetching users...");
       const usersData = await fetchUsers();
+      console.log(usersData)
       this.setState({ users: usersData, filteredUsers: usersData });
     } catch (error) {
       console.error("Error fetching users:", error);
@@ -140,7 +141,7 @@ export class UserList extends Component {
       return;
     }
     const dataChange = {
-      role: data.role,
+      role: data.type,
       username: data.username,
       name: data.name,
       mail: data.mail,
@@ -235,7 +236,7 @@ export class UserList extends Component {
         },
         {
           key: "Role",
-          value: userData.role,
+          value: userData.type,
         },
         {
           key: "Mail",
@@ -354,7 +355,7 @@ export class UserList extends Component {
           key: "Role",
           value: (
             <>
-              <div>{userInfo.role}</div>
+              <div>{userInfo.type}</div>
             </>
           ),
         },
