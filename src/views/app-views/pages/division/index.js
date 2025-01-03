@@ -1,45 +1,27 @@
 import React, { Component } from "react";
-import { Card, Table, Tag, Tooltip, message, Button, Select, Modal, Form } from "antd";
+import { Card, Table, Tag, Tooltip, message, Button, Select, Modal, Form, Spin } from "antd";
 import { EyeOutlined, DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import AvatarStatus from "components/shared-components/AvatarStatus";
-
 import { Input } from "antd";
-import { createData, fetchDatas } from "api/division";
+import { createData, deleteDataById, fetchDatas, getDataDetails, updateDataById } from "api/division";
+import EditData from "./EditData";
 export class UserList extends Component {
   state = {
     datas: null,
     dataProfileVisible: false,
     selectedData: null,
     modalData: null,
-    filteredDatas: null,
-    detailVisible: false,
     modalVisible: false,
+    modalDetailVisible: false,
+    tableDetail: null,
+    modalUpdateVisible: false,
+    popupLoad: false
   };
 
   componentDidMount() {
     this.loadDatas(); // Call the method to fetch datas on component mount
   }
-
-  delete = (userId) => {
-    Modal.confirm({
-      title: "Are you sure you want to delete this division?",
-      content: "This action cannot be undone.",
-      okText: "Yes, Delete",
-      cancelText: "Cancel",
-      okType: "danger",
-      onOk: () => {
-        // Proceed with deletion
-        this.setState({
-          users: this.state.users.filter((item) => item.id !== userId),
-        });
-        message.success({ content: `Deleted division ${userId}`, duration: 2 });
-      },
-      onCancel: () => {
-        message.info("Deletion cancelled.");
-      },
-    });
-  };
 
   loadDatas = async () => {
     try {
@@ -53,24 +35,116 @@ export class UserList extends Component {
     }
   };
 
-  showDetail = () => {
-    this.setState({
-      detailVisible: true,
+  deleteData = (id) => {
+    Modal.confirm({
+      title: "Are you sure you want to delete this data?",
+      content: "This action cannot be undone.",
+      okText: "Yes, Delete",
+      cancelText: "Cancel",
+      okType: "danger",
+      onOk: async () => {
+        // Proceed with deletion
+        try {
+          await deleteDataById(id)
+          this.loadDatas()
+        message.success({ content: `Deleted data succes`, duration: 2 });  
+        } catch (error) {
+          message.error("Failed to delete data")
+        }
+        
+      },
+      onCancel: () => {
+        message.info("Deletion cancelled.");
+      },
     });
   };
 
-  showDataProfile = (dataInfo) => {
-    this.setState({
-      dataProfileVisible: true,
-      selectedData: dataInfo,
-    });
-  };
+  showDetail = async (id) => {
+    try {
 
-  closeUserProfile = () => {
-    this.setState({
-      userProfileVisible: false,
-      selectedData: null,
-    });
+      const data = await getDataDetails(id)
+
+      const tableDetail = [{
+        key: "Name",
+        value: data.name
+      }]  
+
+      this.setState({ modalDetailVisible: true, tableDetail})
+    } catch (error) {
+      message.error("Failed to load detail")
+    }
+    
+  }
+
+  updateDataValue = async (id, key, value) => {
+    this.setState({ popupLoad: true });
+    let data;
+    try {
+      data = await getDataDetails(id);
+    } catch (error) {
+      message.error("Data not Found");
+    }
+
+    if (!key) {
+      console.error("Key is required to update the object");
+      return;
+    }
+    const dataChange = {
+      name: data.name
+    };
+
+    // Create a shallow copy of the data object and update the key
+    const updatedData = { ...dataChange, [key]: value };
+
+    try {
+      // Call the API to update user details
+      const response = await updateDataById(id, updatedData);
+
+      // Show success message
+      message.success("Data updated successfully!");
+      console.log("Data updated successfully:", response);
+      this.loadDatas();
+      // Additional actions, e.g., update the UI
+    } catch (error) {
+      // Show error message
+      message.error(`Failed to update position: ${error.message}`);
+      console.error("Error while updating position:", error.message);
+    }
+
+    this.setState({ popupLoad: false });
+    // Example: Set the updated data back to the state or use it as needed
+    this.setState({ update: updatedData });
+  };
+  
+  showUpdateData = async (id) => {
+    try {
+      const detail = await getDataDetails(id);
+
+      // Prepare table detail
+      const tableDetail = [{
+        key: "Name",
+        value: <EditData 
+                keyName={"name"}
+                value={detail.name}
+                handleValue={this.updateDataValue}
+                id={id}
+        />,
+    }];
+  
+      // Update state with fetched data
+      this.setState({
+        modalUpdateVisible: true,
+        tableDetail: tableDetail,
+       // Loading complete
+      });
+    } catch (error) {
+
+      // Log the error (optional, for debugging)
+      console.error("Error fetching details:", error);
+  
+      // Show error message
+      message.error("Failed to load details. Please try again.");
+    }
   };
 
   showModal = (dataInfo) => {
@@ -81,21 +155,21 @@ export class UserList extends Component {
   };
 
   handleModalCancel = () => {
-    
     this.setState({
       modalVisible: false,
-      detailVisible: false,
-      modalData: null,
-      
+      modalDetailVisible: false,
+      modalUpdateVisible: false,
+      modalUserData: null,
     });
   };
 
-  handleCreateSubmit = (values) => {
+  handleCreateSubmit = async (values) => {
     console.log("meow")
-    createData(values)
+    await createData(values)
       .then(() => {
         this.setState({ modalVisible: false, modalData: null });
         this.loadDatas();
+        message.success("Data created!");
       })
       .catch((error) => {
         console.error("Error creating position:", error);
@@ -105,7 +179,7 @@ export class UserList extends Component {
       modalVisible: false,
       modalData: null,
     });
-    message.success("Division created!");
+    
   };
 
   render() {
@@ -118,13 +192,17 @@ export class UserList extends Component {
       modalData,
       userProfileVisible,
       selectedData,
-      detailVisible
+      modalDetailVisible,
+      tableDetail,
+      popupLoad,
+      modalUpdateVisible
     } = this.state;
     const tableColumns = [
       {
         title: "Name",
         dataIndex: "name",
-        sorter: (a, b) => a.role.localeCompare(b.role), 
+        sorter: (a, b) => a.name.localeCompare(b.name), 
+        defaultSortOrder: "ascend",
       },
       {
         title: "Last Updated",
@@ -143,7 +221,7 @@ export class UserList extends Component {
                 className="mr-2"
                 icon={<EditOutlined />}
                 onClick={() => {
-                  this.showModal(elm);
+                  this.showUpdateData(elm.id);
                 }}
                 size="small"
               />
@@ -154,7 +232,7 @@ export class UserList extends Component {
                 className="mr-2"
                 icon={<EyeOutlined />}
                 onClick={() => {
-                  this.showDetail(elm);
+                  this.showDetail(elm.id);
                 }}
                 size="small"
               />
@@ -164,7 +242,7 @@ export class UserList extends Component {
                 danger
                 icon={<DeleteOutlined />}
                 onClick={() => {
-                  this.deleteUser(elm.id);
+                  this.deleteData(elm.id);
                 }}
                 size="small"
               />
@@ -173,25 +251,7 @@ export class UserList extends Component {
         ),
       },
     ];
-    const detailedData = [
-      { id: 1, name: "Anderson",  username: "andy", role: "Admin"},
-      { id: 1, name: "Matthew", username: "matt", role: "User"},
-    ];
-    const detailTableColumns = [
-      {
-        title: "Name",
-        dataIndex: "name",
-      },
-      {
-        title: "Username",
-        dataIndex: "username",
-      },
-      {
-        title: "Position",
-        dataIndex: "role",
-      },
-
-    ];
+   
     return (
       <div bodyStyle={{ padding: "0px" }}>
           <div
@@ -237,7 +297,7 @@ export class UserList extends Component {
         </div>
 
         <Modal
-          title={modalData ? "Edit Division" : "New Division"}
+          title={"New Division"}
           visible={modalVisible}
           onCancel={this.handleModalCancel}
           destroyOnClose
@@ -265,18 +325,60 @@ export class UserList extends Component {
         </Modal>
 
         <Modal
-          title={"Detail Position"}
-          visible={detailVisible}
+          title={"Edit Division"}
+          visible={modalUpdateVisible}
+          width="80%"
           onCancel={this.handleModalCancel}
           footer={null}
+          destroyOnClose
         >
-          <Table
-            columns={detailTableColumns}
-            dataSource={detailedData}
-            rowKey="id"
-          />
+          <Spin spinning={popupLoad}>
+            <Table
+              className="small"
+              style={{ marginBottom: "24px" }}
+              columns={[
+                { title: "", dataIndex: "key", width: "30%" },
+                { title: "", dataIndex: "value" },
+              ]}
+              rowClassName={(record, index) =>
+                index % 2 === 0 ? "row-even" : "row-odd"
+              }
+              dataSource={tableDetail}
+              rowKey="key"
+              rowHoverable={false}
+              pagination={false}
+              showHeader={false}
+              borderColor={"#000"}
+            />
+          </Spin>
         </Modal>
 
+        <Modal
+          title={"Detail Division"}
+          visible={modalDetailVisible}
+          onCancel={this.handleModalCancel}
+          footer={null}
+          destroyOnClose
+          width="80%"
+        >
+          <Table
+            className="small"
+            columns={[
+              { title: "", dataIndex: "key" },
+              { title: "", dataIndex: "value" },
+            ]}
+            rowClassName={(record, index) =>
+              index % 2 === 0 ? "row-even" : "row-odd"
+            }
+            dataSource={tableDetail}
+            rowKey="key"
+            rowHoverable={false}
+            pagination={false}
+            showHeader={false}
+            borderColor={"#000"}
+          />
+        </Modal>
+ 
       </div>
     );
   }

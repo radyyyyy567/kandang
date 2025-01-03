@@ -35,7 +35,7 @@ export const createData = async (data) => {
     }
 
     // Make the API call to create the user with the authorization header
-    const response = await axios.post('http://100.114.201.121:8093/api/division/v1/creatDivisionInCompany', data, {
+    const response = await axios.post('http://100.114.201.121:8093/api/division/v1/createDivisionInCompany', data, {
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
@@ -51,7 +51,7 @@ export const createData = async (data) => {
 };
 
 
-export const getUserDetails = async (userId) => {
+export const getDataDetails = async (id) => {
   try {
     // Retrieve the token from localStorage or cookies
     const token = localStorage.getItem('auth_token');
@@ -60,8 +60,8 @@ export const getUserDetails = async (userId) => {
       throw new Error("Authorization token not found.");
     }
 
-    // Make the API call to get user details with the authorization header
-    const response = await axios.get(`http://100.114.201.121:8093/api/user/v1/details/${userId}`, {
+    // Make the API call to get data details with the authorization header
+    const response = await axios.get(`http://100.114.201.121:8093/api/division/v1/getDivisionDetailsInCompany/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
@@ -76,10 +76,10 @@ export const getUserDetails = async (userId) => {
   }
 };
 
-export const updateUserById = async (userId, updateData) => {
+export const updateDataById = async (id, updateData) => {
   try {
-    if (!userId) {
-      throw new Error("User ID is required.");
+    if (!id) {
+      throw new Error("Data ID is required.");
     }
 
     if (!updateData || typeof updateData !== "object") {
@@ -94,7 +94,7 @@ export const updateUserById = async (userId, updateData) => {
 
     // API call to update user details
     const response = await axios.put(
-      `http://100.114.201.121:8093/api/user/v1/updateUserById/${userId}`,
+      `http://100.114.201.121:8093/api/division/v1/updateDivisionInCompanyById/${id}`,
       updateData, // Body payload for the update
       {
         headers: {
@@ -107,7 +107,39 @@ export const updateUserById = async (userId, updateData) => {
     // Return the response data
     return response.data;
   } catch (error) {
-    console.error(`Error updating user details for ID ${userId}:`, error.message);
+    console.error(`Error updating Division details for ID ${id}:`, error.message);
+    throw error; // Propagate the error
+  }
+};
+
+export const deleteDataById = async (id) => {
+  try {
+    if (!id) {
+      throw new Error("Data ID is required.");
+    }
+
+    // Retrieve the token from localStorage or cookies
+    const token = localStorage.getItem('auth_token');
+    if (!token) {
+      throw new Error("Authorization token not found.");
+    }
+
+    console.log("hai delete")
+
+    const response = await axios.delete(
+      `http://100.114.201.121:8093/api/division/v1/deleteDivisionById/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    // Return the response data
+    return response.data;
+  } catch (error) {
+    console.error(`Error delete data for ID ${id}:`, error.message);
     throw error; // Propagate the error
   }
 };

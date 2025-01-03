@@ -150,7 +150,7 @@ const Profile = () => {
       return;
     }
     const dataChange = {
-      role: userInfo.role,
+      type: userInfo.type,
       username: userInfo.username,
       name: userInfo.name,
       mail: userInfo.mail,
@@ -251,7 +251,7 @@ const Profile = () => {
     },
     {
       key: "Role",
-      value: <div>{userInfo.role}</div>,
+      value: <div>{userInfo.type}</div>,
     },
   ];
 
